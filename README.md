@@ -1,5 +1,5 @@
 # VidyoPlatfrom Screen Share Android Connector App
-vidyoplatform-connector-android-virtual-video-source is a VidyoPlatform reference application highlighting how to integrate video chat into a native Android app with device screen share functionality.
+VidyoPlatform reference application highlighting how to integrate video chat into a native Android app with device screen share functionality.
 
 Developer documentation: https://vidyo.github.io/vidyoplatform.github.io
 
