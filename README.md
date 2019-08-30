@@ -15,3 +15,12 @@ git clone https://github.com/Vidyo/vidyoplatform-custom-connector-android.git
 - Upgrade Gradle file if neccessary
 - Download required build-tools
 - Sync/Clean/Build the project
+
+### Share Functionality Overview
+- **ShareManager**: share logic controller in order to start/stop and release share components;
+- **ShareSession**: responsible for setup virtual device projection and retrieve device screen image;
+- **FrameProvider**: responsible for feeding VirtualVideoSorce with specified frame per rate value provided by VidyoClient library within "onVirtualVideoSourceStateUpdated" -> "VIDYO_DEVICESTATE_ConfigurationChanged";
+- **FrameHolder**: raw frame holder/transmitter after initially captured image has been transformed into Bitmap;
+- **ShareConstraints**: frame constraints to be configured for VitrualVideoSoruce via 'setBoundsConstraints' API.
+Contains an option to limit max frame resolution. Default: Full HD (1080)
+- **ShareService**: regular service as android's component for handling orientation change outside of application in order to restart share logic and update frame orientation & constraints.
