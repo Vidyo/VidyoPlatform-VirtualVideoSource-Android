@@ -16,7 +16,7 @@ git clone https://github.com/Vidyo/vidyoplatform-custom-connector-android.git
 - Download required build-tools
 - Sync/Clean/Build the project
 
-### Share Functionality Overview
+### Device Screen Share Functionality Overview
 - **ShareManager**: share logic controller in order to start/stop and release share components;
 - **ShareSession**: responsible for setup virtual device projection and retrieve device screen image;
 - **FrameProvider**: responsible for feeding VirtualVideoSorce with specified frame per rate value provided by VidyoClient library within "onVirtualVideoSourceStateUpdated" -> "VIDYO_DEVICESTATE_ConfigurationChanged";
