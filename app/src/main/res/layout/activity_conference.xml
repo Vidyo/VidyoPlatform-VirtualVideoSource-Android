@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light">
+
+    <FrameLayout
+        android:id="@+id/video_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include layout="@layout/control_view_layout" />
+
+    <include layout="@layout/progress_layout" />
+
+    <FrameLayout
+        android:id="@+id/navigation_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/share_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_margin="@dimen/material_margin"
+        android:background="@drawable/round_shape"
+        android:gravity="center"
+        android:paddingStart="@dimen/material_margin"
+        android:paddingTop="8dp"
+        android:paddingEnd="@dimen/material_margin"
+        android:paddingBottom="8dp"
+        android:text="@string/end_share"
+        android:textAllCaps="true"
+        android:textColor="#E45458" />
+</FrameLayout>
