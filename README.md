@@ -4,7 +4,7 @@ VidyoPlatform reference application highlighting how to integrate video chat int
 Developer documentation: https://vidyo.github.io/vidyoplatform.github.io
 
 # Clone
-git clone https://github.com/Vidyo/vidyoplatform-custom-connector-android.git
+git clone https://github.com/Vidyo/vidyoplatform-connector-android-virtual-video-source.git
 
 ## Acquire VidyoClient iOS SDK
 1. Download the latest VidyoClient Android SDK package [here](https://static.vidyo.io/latest/package/VidyoClient-AndroidSDK.zip) and unzip it.
