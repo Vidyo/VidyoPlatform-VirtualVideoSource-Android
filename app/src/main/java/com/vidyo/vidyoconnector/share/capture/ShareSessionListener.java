@@ -1,6 +1,6 @@
 package com.vidyo.vidyoconnector.share.capture;
 
-import android.support.annotation.WorkerThread;
+import androidx.annotation.WorkerThread;
 
 import com.vidyo.vidyoconnector.share.model.FrameHolder;
 

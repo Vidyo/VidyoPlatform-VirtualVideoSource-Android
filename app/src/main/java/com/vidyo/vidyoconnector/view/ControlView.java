@@ -4,14 +4,15 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.vidyo.vidyoconnector.R;
 import com.vidyo.vidyoconnector.event.ControlEvent;
@@ -147,7 +148,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
     public void onClick(View v) {
         if (internalState == null) return;
 
-        ControlEvent controlEvent = null;
+        ControlEvent<?> controlEvent = null;
 
         switch (v.getId()) {
             case R.id.call_control:

@@ -1,6 +1,6 @@
 package com.vidyo.vidyoconnector.share.provider;
 
-import android.support.annotation.MainThread;
+import androidx.annotation.MainThread;
 
 import com.vidyo.vidyoconnector.share.model.FrameHolder;
 

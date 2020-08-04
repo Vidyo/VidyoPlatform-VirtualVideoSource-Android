@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.vidyo.VidyoClient.Connector.Connector;
 import com.vidyo.VidyoClient.Connector.ConnectorPkg;
@@ -175,7 +176,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
     }
 
     @Override
-    public void onControlEvent(ControlEvent event) {
+    public void onControlEvent(ControlEvent<?> event) {
         if (connector == null) return;
 
         switch (event.getCall()) {
@@ -184,7 +185,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
 
                 progressBar.setVisibility(View.VISIBLE);
                 controlView.disable(true);
-                boolean state = (boolean) event.getValue();
+                boolean state = (Boolean) event.getValue();
 
                 controlView.updateConnectionState(state ? ControlView.ConnectionState.CONNECTING : ControlView.ConnectionState.DISCONNECTING);
 
@@ -203,20 +204,20 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
                 }
                 break;
             case MUTE_CAMERA:
-                boolean cameraPrivacy = (boolean) event.getValue();
+                boolean cameraPrivacy = (Boolean) event.getValue();
                 connector.setCameraPrivacy(cameraPrivacy);
                 break;
             case MUTE_MIC:
-                connector.setMicrophonePrivacy((boolean) event.getValue());
+                connector.setMicrophonePrivacy((Boolean) event.getValue());
                 break;
             case MUTE_SPEAKER:
-                connector.setSpeakerPrivacy((boolean) event.getValue());
+                connector.setSpeakerPrivacy((Boolean) event.getValue());
                 break;
             case CYCLE_CAMERA:
                 connector.cycleCamera();
                 break;
             case DEBUG_OPTION:
-                boolean value = (boolean) event.getValue();
+                boolean value = (Boolean) event.getValue();
                 if (value) {
                     connector.enableDebug(7776, "");
                 } else {
@@ -293,15 +294,14 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         });
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (shareManager != null) shareManager.destroy();
-
         if (controlView != null) controlView.unregisterListener();
 
         if (connector != null) {
+            connector.hideView(controlView);
             connector.disable();
             connector = null;
         }

@@ -8,7 +8,8 @@ import android.content.ServiceConnection;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.IBinder;
-import android.support.annotation.WorkerThread;
+
+import androidx.annotation.WorkerThread;
 
 import com.vidyo.VidyoClient.Connector.Connector;
 import com.vidyo.VidyoClient.Device.Device;
@@ -124,7 +125,7 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
             this.captureIntent = data;
 
             if (virtualVideoSource != null) {
-                this.connector.selectVirtualWindowShare(virtualVideoSource);
+                this.connector.selectVirtualSourceWindowShare(virtualVideoSource);
             } else {
                 if (shareListener != null) shareListener.onError("Null source!");
             }

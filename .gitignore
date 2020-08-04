@@ -34,13 +34,6 @@ captures/
 
 # IntelliJ
 *.iml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/gradle.xml
-.idea/assetWizardSettings.xml
-.idea/dictionaries
-.idea/libraries
-.idea/caches
 
 # Keystore files
 # Uncomment the following line if you do not want to check your keystore files in.
@@ -58,8 +51,7 @@ freeline/
 freeline_project_description.json
 
 # fastlane
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots
-fastlane/test_output
-fastlane/readme.md
+fastlane/
+/.idea
+/gradle/wrapper/
+/app/libs/
