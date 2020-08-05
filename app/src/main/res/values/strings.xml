@@ -16,4 +16,8 @@
     <string name="credentials">VidyoPlatform credentials</string>
 
     <string name="end_share">End share</string>
+    <string name="display_name">Display Name</string>
+    <string name="pin">Pin</string>
+    <string name="room_key">Room key</string>
+    <string name="portal">Portal</string>
 </resources>
