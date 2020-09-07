@@ -5,9 +5,9 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ServiceInfo;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.IBinder;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.vidyo.vidyoconnector.R;
 import com.vidyo.vidyoconnector.utils.Logger;
@@ -28,23 +29,25 @@ public class ShareService extends Service {
         }
 
         void showNotification() {
-            ShareService.this.showNotification();
+            ShareService.this.startAsForeground();
         }
     }
 
-    public static void bind(Activity activity, ServiceConnection connection) {
+    public static void startShareService(Activity activity, ServiceConnection connection) {
         Intent startServiceIntent = new Intent(activity, ShareService.class);
+
+        ContextCompat.startForegroundService(activity, startServiceIntent);
+
         activity.bindService(startServiceIntent, connection, BIND_AUTO_CREATE);
     }
 
-    public static void showHide(Activity activity, boolean showHide) {
+    public static void releaseShareService(Activity activity) {
         Intent serviceIntent = new Intent(activity, ShareService.class);
-        serviceIntent.setAction(showHide ? SHARE_SHOW_ACTION : SHARE_HIDE_ACTION);
+        serviceIntent.setAction(SHARE_RELEASE_ACTION);
         activity.startService(serviceIntent);
     }
 
-    public static final String SHARE_SHOW_ACTION = "share.show.notification.action";
-    public static final String SHARE_HIDE_ACTION = "share.hide.notification.action";
+    public static final String SHARE_RELEASE_ACTION = "share.release.action";
 
     public static final String SHARE_CHANNEL_ID = "SHARE_CHANNEL_ID";
 
@@ -66,13 +69,8 @@ public class ShareService extends Service {
         if (action != null) {
             Logger.i("Share service action: " + action);
 
-            switch (action) {
-                case SHARE_SHOW_ACTION:
-                    showNotification();
-                    break;
-                case SHARE_HIDE_ACTION:
-                    dismissNotification();
-                    break;
+            if (SHARE_RELEASE_ACTION.equals(action)) {
+                stopShareService();
             }
         }
 
@@ -102,20 +100,21 @@ public class ShareService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Logger.i("Share service destroyed.");
-        dismissNotification();
     }
 
-    private void showNotification() {
-        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    private void startAsForeground() {
         Notification notification = createNotification();
-        manager.notify(SHARE_NOTIFICATION_ID, notification);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(SHARE_NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);
+        } else {
+            startForeground(SHARE_NOTIFICATION_ID, notification);
+        }
     }
 
-    private void dismissNotification() {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager != null) {
-            manager.cancel(SHARE_NOTIFICATION_ID);
-        }
+    private void stopShareService() {
+        stopForeground(true);
+        stopSelf();
     }
 
     private Notification createNotification() {
@@ -125,7 +124,6 @@ public class ShareService extends Service {
                 .setContentText("Share in progress...")
                 .setSmallIcon(R.drawable.ic_share_notification_icon)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                .setOngoing(true)
                 .build();
     }
 

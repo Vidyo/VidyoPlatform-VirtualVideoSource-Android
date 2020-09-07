@@ -104,6 +104,12 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
         }
 
         if (activity != null) {
+            /* App has to start the foreground service before starting the activity returned from
+             * MediaProjectionManager.createScreenCaptureIntent() */
+            if (!isBounded) {
+                ShareService.startShareService(this.activity, shareServiceConnection);
+            }
+
             activity.startActivityForResult(projectionManager.createScreenCaptureIntent(), SCREEN_SHARE_REQUEST_CODE);
         }
     }
@@ -113,7 +119,7 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
      */
     public void requestStopShare() {
         if (connector != null) {
-            connector.selectVirtualWindowShare(null);
+            connector.selectVirtualSourceWindowShare(null);
         }
     }
 
@@ -140,10 +146,6 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
 
     public void destroy() {
         stopShare();
-
-        if (isBounded && activity != null) {
-            activity.unbindService(shareServiceConnection);
-        }
 
         if (connector != null) {
             this.connector.unregisterVirtualVideoSourceEventListener();
@@ -178,11 +180,6 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
         this.isSharing = true;
 
         if (this.shareListener != null) shareListener.onShareStarted();
-
-        if (isBounded) {
-            ShareService.showHide(this.activity, true);
-        } else
-            ShareService.bind(this.activity, shareServiceConnection);
     }
 
     void updateShareOrientation() {
@@ -194,9 +191,17 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
     }
 
     private void stopShare() {
-        ShareService.showHide(this.activity, false);
+        stopAndUnBindShareService();
 
         if (shareCaptureSession != null) shareCaptureSession.requestReleaseSession();
+    }
+
+    private void stopAndUnBindShareService() {
+        if (isBounded && activity != null) {
+            activity.unbindService(shareServiceConnection);
+            ShareService.releaseShareService(activity);
+            isBounded = false;
+        }
     }
 
     private void updateBoundConstraints() {
@@ -301,6 +306,7 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
         public void onServiceDisconnected(ComponentName name) {
             // Disconnected.
             isBounded = false;
+            Logger.i("Service has been disconnected.");
         }
     };
 }
