@@ -1,14 +1,16 @@
-package com.vidyo.vidyoconnector.share.model;
+package com.vidyo.vidyoconnector.capture.model;
+
+import com.otaliastudios.cameraview.frame.Frame;
 
 /**
- * Share constraints for remote delivery.
+ * Capture constraints for remote delivery.
  */
-public class ShareConstraints {
+public class CaptureConstraints {
 
     private static final float DEFAULT_SCALE = 1;
 
     // Full HD
-    private static final int MAX_VIRTUAL_SHARE_QUALITY = 1080;
+    private static final int MAX_VIRTUAL_CAPTURE_QUALITY = 1080;
 
     private static final float SCALE_MIN_QUALITY_DELTA = 1.5f;
 
@@ -20,11 +22,11 @@ public class ShareConstraints {
     private final int originalWidth;
     private final int originalHeight;
 
-    public ShareConstraints(int width, int height) {
+    public CaptureConstraints(int width, int height) {
         originalWidth = width;
         originalHeight = height;
 
-        final float maxScaleFactor = getScaleFactor(width, height, MAX_VIRTUAL_SHARE_QUALITY);
+        final float maxScaleFactor = getScaleFactor(width, height, MAX_VIRTUAL_CAPTURE_QUALITY);
         maxWidth = (int) (width * maxScaleFactor);
         maxHeight = (int) (height * maxScaleFactor);
 
@@ -39,13 +41,13 @@ public class ShareConstraints {
     }
 
     /* Usually happens after rotation */
-    public static boolean shouldUpdateConstraints(ShareConstraints constraints, FrameHolder frameHolder) {
-        return constraints == null || constraints.originalWidth != frameHolder.width || constraints.originalHeight != frameHolder.height;
+    public static boolean shouldUpdateConstraints(CaptureConstraints constraints, Frame frame) {
+        return constraints == null || constraints.originalWidth != frame.getSize().getWidth() || constraints.originalHeight != frame.getSize().getHeight();
     }
 
     @Override
     public String toString() {
-        return "ShareConstraints{" +
+        return "CaptureConstraints{" +
                 "maxWidth=" + maxWidth +
                 ", minWidth=" + minWidth +
                 ", maxHeight=" + maxHeight +

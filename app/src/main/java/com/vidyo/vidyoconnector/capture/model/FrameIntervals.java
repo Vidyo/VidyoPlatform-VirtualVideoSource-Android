@@ -1,4 +1,4 @@
-package com.vidyo.vidyoconnector.share.model;
+package com.vidyo.vidyoconnector.capture.model;
 
 import java.util.concurrent.TimeUnit;
 
@@ -9,8 +9,8 @@ public class FrameIntervals {
 
     private static final long SECOND = TimeUnit.SECONDS.toNanos(1);
 
-    private static final int DEFAULT_MAX_FPS = 10;
-    private static final int DEFAULT_MIN_FPS = 5;
+    private static final int DEFAULT_MAX_FPS = 30;
+    private static final int DEFAULT_MIN_FPS = 15;
 
     public final long maxInterval;
     public final long minInterval;

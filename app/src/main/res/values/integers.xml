@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="picture_min_width">180</integer>
+    <integer name="picture_min_height">90</integer>
+    <integer name="picture_max_width">1080</integer>
+    <integer name="picture_max_height">1920</integer>
+
+    <integer name="processing_max_width">1080</integer>
+    <integer name="processing_max_height">1920</integer>
+</resources>

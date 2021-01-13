@@ -34,7 +34,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
 
     private View controlMoreLayout;
     private ImageView debugOption;
-    private ImageView shareToggle;
+    private ImageView captureToggle;
 
     private TextView libraryVersion;
     private TextView connectionState;
@@ -89,7 +89,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
         switchCamera.setOnClickListener(state ? null : this);
 
         debugOption.setOnClickListener(state ? null : this);
-        shareToggle.setOnClickListener(state ? null : this);
+        captureToggle.setOnClickListener(state ? null : this);
 
         findViewById(R.id.more_control).setOnClickListener(state ? null : this);
         findViewById(R.id.more_send_logs).setOnClickListener(state ? null : this);
@@ -106,8 +106,8 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
         this.connectionState.setText(state.name());
     }
 
-    public void toggleShareState(boolean state) {
-        internalState.setShare(state);
+    public void toggleCaptureState(boolean state) {
+        internalState.setCapture(state);
         invalidateState();
     }
 
@@ -117,7 +117,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
         muteMic.setImageResource(internalState.isMuteMic() ? R.drawable.microphone_off : R.drawable.microphone_on);
         muteSpeaker.setImageResource(internalState.isMuteSpeaker() ? R.drawable.speaker_off : R.drawable.speaker_on);
         debugOption.setImageResource(internalState.isDebug() ? R.drawable.ic_debug_on : R.drawable.ic_debug_off);
-        shareToggle.setImageResource(internalState.isShare() ? R.drawable.ic_share_off : R.drawable.ic_share_on);
+        captureToggle.setImageResource(internalState.isCapture() ? R.drawable.ic_video_on : R.drawable.ic_video_off);
     }
 
     private void init() {
@@ -131,7 +131,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
 
         controlMoreLayout = findViewById(R.id.control_settings_layout);
         debugOption = findViewById(R.id.more_debug);
-        shareToggle = findViewById(R.id.share_toggle);
+        captureToggle = findViewById(R.id.capture_toggle);
 
         libraryVersion = findViewById(R.id.library_version);
         connectionState = findViewById(R.id.connection_state);
@@ -186,9 +186,9 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
             case R.id.more_send_logs:
                 controlEvent = new ControlEvent<>(ControlEvent.Call.SEND_LOGS);
                 break;
-            case R.id.share_toggle:
-                boolean share = internalState.isShare();
-                controlEvent = new ControlEvent<>(ControlEvent.Call.SHARE, share);
+            case R.id.capture_toggle:
+                boolean isCapture = internalState.isCapture();
+                controlEvent = new ControlEvent<>(ControlEvent.Call.CAPTURE, isCapture);
                 break;
         }
 
@@ -204,7 +204,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
         private boolean muteMic;
         private boolean muteSpeaker;
 
-        private boolean share;
+        private boolean capture;
 
         private boolean debug;
 
@@ -213,7 +213,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
             muteCamera = in.readByte() != 0x00;
             muteMic = in.readByte() != 0x00;
             muteSpeaker = in.readByte() != 0x00;
-            share = in.readByte() != 0x00;
+            capture = in.readByte() != 0x00;
             debug = in.readByte() != 0x00;
         }
 
@@ -264,12 +264,12 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
             return debug;
         }
 
-        public boolean isShare() {
-            return share;
+        public boolean isCapture() {
+            return capture;
         }
 
-        public void setShare(boolean share) {
-            this.share = share;
+        public void setCapture(boolean capture) {
+            this.capture = capture;
         }
 
         static State defaultState() {
@@ -287,11 +287,10 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
             dest.writeByte((byte) (muteCamera ? 0x01 : 0x00));
             dest.writeByte((byte) (muteMic ? 0x01 : 0x00));
             dest.writeByte((byte) (muteSpeaker ? 0x01 : 0x00));
-            dest.writeByte((byte) (share ? 0x01 : 0x00));
+            dest.writeByte((byte) (capture ? 0x01 : 0x00));
             dest.writeByte((byte) (debug ? 0x01 : 0x00));
         }
 
-        @SuppressWarnings("unused")
         public static final Parcelable.Creator<State> CREATOR = new Parcelable.Creator<State>() {
             @Override
             public State createFromParcel(Parcel in) {

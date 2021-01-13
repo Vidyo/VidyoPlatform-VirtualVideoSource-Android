@@ -76,9 +76,9 @@
             tools:ignore="ContentDescription" />
 
         <ImageView
-            android:id="@+id/share_toggle"
+            android:id="@+id/capture_toggle"
             style="@style/ControlButton"
-            android:src="@drawable/ic_share_on"
+            android:src="@drawable/ic_video_on"
             tools:ignore="ContentDescription" />
     </LinearLayout>
 
