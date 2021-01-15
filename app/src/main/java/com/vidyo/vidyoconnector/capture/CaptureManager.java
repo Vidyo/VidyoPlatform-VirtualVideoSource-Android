@@ -1,6 +1,7 @@
 package com.vidyo.vidyoconnector.capture;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.frame.Frame;
@@ -20,6 +21,8 @@ public class CaptureManager implements Connector.IRegisterVirtualVideoSourceEven
     private static final FrameIntervals FRAME_INTERVALS = new FrameIntervals();
 
     private Connector connector;
+
+    @Nullable
     private final CameraView cameraView;
 
     private VirtualVideoSource virtualVideoSource;
@@ -27,7 +30,7 @@ public class CaptureManager implements Connector.IRegisterVirtualVideoSourceEven
 
     private boolean isCapturing = false;
 
-    public CaptureManager(Connector connector, CameraView cameraView) {
+    public CaptureManager(Connector connector, @Nullable CameraView cameraView) {
         this.connector = connector;
         this.cameraView = cameraView;
 
@@ -72,15 +75,20 @@ public class CaptureManager implements Connector.IRegisterVirtualVideoSourceEven
         }
     }
 
-    private void startCapture() {
-        cameraView.addFrameProcessor(this);
+    private boolean startCapture() {
+        if (cameraView == null) return false;
 
+        cameraView.addFrameProcessor(this);
         isCapturing = true;
+        return true;
     }
 
-    private void stopCapture() {
+    private boolean stopCapture() {
+        if (cameraView == null) return false;
+
         cameraView.removeFrameProcessor(this);
         isCapturing = false;
+        return true;
     }
 
     private void updateBoundConstraints() {
@@ -109,7 +117,7 @@ public class CaptureManager implements Connector.IRegisterVirtualVideoSourceEven
                 height
         );
 
-        virtualVideoSource.onFrame(newVideoFrame, MEDIA_FORMAT);
+        virtualVideoSource.onFrame(newVideoFrame, MediaFormat.VIDYO_MEDIAFORMAT_NV21);
     }
 
     @Override

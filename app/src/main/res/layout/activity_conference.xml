@@ -28,7 +28,6 @@
         app:cameraVideoSizeMaxWidth="@integer/picture_max_width"
         app:cameraVideoSizeMinHeight="@integer/picture_min_height"
         app:cameraVideoSizeMinWidth="@integer/picture_min_width"
-        app:cameraVideoSizeAspectRatio="3:4"
         app:cameraVideoSizeSmallest="false">
 
     </com.otaliastudios.cameraview.CameraView>

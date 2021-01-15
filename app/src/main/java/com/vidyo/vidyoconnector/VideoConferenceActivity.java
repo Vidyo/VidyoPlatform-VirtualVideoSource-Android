@@ -289,7 +289,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         }
 
         if (connector != null) {
-            connector.hideView(controlView);
+            connector.hideView(videoView);
             connector.disable();
             connector = null;
         }
