@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.vidyo.VidyoClient.Connector.Connector;
@@ -102,7 +103,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Logger.i("Config change requested.");
 
@@ -301,7 +302,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         if (controlView != null) controlView.unregisterListener();
 
         if (connector != null) {
-            connector.hideView(controlView);
+            connector.hideView(videoView);
             connector.disable();
             connector = null;
         }
