@@ -13,9 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
-import com.otaliastudios.cameraview.CameraListener;
-import com.otaliastudios.cameraview.CameraOptions;
-import com.otaliastudios.cameraview.CameraView;
 import com.vidyo.VidyoClient.Connector.Connector;
 import com.vidyo.VidyoClient.Connector.ConnectorPkg;
 import com.vidyo.vidyoconnector.capture.CaptureManager;
@@ -43,9 +40,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
     private View progressBar;
 
     private Connector connector;
-    private CaptureManager captureManager;
-
-    private CameraView cameraView;
 
     @Override
     public void onStart() {
@@ -76,8 +70,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         ConnectorPkg.initialize();
         ConnectorPkg.setApplicationUIContext(this);
 
-        cameraView = findViewById(R.id.camera_view);
-
         progressBar = findViewById(R.id.progress);
         progressBar.setVisibility(View.GONE);
 
@@ -92,35 +84,17 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
                 8, "*@VidyoClient info@VidyoConnector info warning",
                 AppUtils.configLogFile(this), 0);
         Logger.i("Connector instance has been created.");
+        connector.selectLocalCamera(null);
 
-        captureManager = new CaptureManager(connector, cameraView);
-
-        connector.showPreview(false);
+        CaptureManager captureManager = new CaptureManager(this, this, connector);
+        if (!connector.registerVirtualVideoSourceEventListener(captureManager)) {
+            Logger.e("registerRemoteMicrophoneEventListener failed");
+        } else {
+            Logger.i("registerRemoteMicrophoneEventListener success");
+        }
 
         videoView.addOnLayoutChangeListener(this);
         controlView.showVersion(connector.getVersion());
-
-        setupCameraView();
-    }
-
-    private void setupCameraView() {
-        connector.selectLocalCamera(null);
-        cameraView.setLifecycleOwner(this);
-
-        cameraView.addCameraListener(new CameraListener() {
-
-            @Override
-            public void onCameraOpened(@NonNull CameraOptions options) {
-                super.onCameraOpened(options);
-                Logger.i("Camera has been opened for processing.");
-            }
-
-            @Override
-            public void onCameraClosed() {
-                super.onCameraClosed();
-                cameraView.clearFrameProcessors();
-            }
-        });
     }
 
     @Override
@@ -251,16 +225,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             case SEND_LOGS:
                 AppUtils.sendLogs(this);
                 break;
-
-            case CAPTURE:
-                if (!captureManager.isCapturing()) {
-                    captureManager.requestStartCamera();
-                    controlView.toggleCaptureState(true);
-                } else {
-                    captureManager.requestStopCamera();
-                    controlView.toggleCaptureState(false);
-                }
-                break;
         }
     }
 
@@ -279,16 +243,12 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (captureManager != null) captureManager.destroy();
         if (controlView != null) controlView.unregisterListener();
 
-        if (cameraView != null) {
-            cameraView.clearCameraListeners();
-            cameraView.clearFrameProcessors();
-            cameraView.setLifecycleOwner(null);
-        }
-
         if (connector != null) {
+            connector.unregisterVirtualVideoSourceEventListener();
+            connector.selectVirtualCamera(null);
+
             connector.hideView(videoView);
             connector.disable();
             connector = null;

@@ -9,7 +9,7 @@ public class ControlEvent<T> extends BusBase<T, ControlEvent.Call> {
 
     public enum Call implements CallBase {
         CONNECT_DISCONNECT, MUTE_CAMERA, MUTE_MIC, MUTE_SPEAKER, CYCLE_CAMERA,
-        DEBUG_OPTION, SEND_LOGS, CAPTURE
+        DEBUG_OPTION, SEND_LOGS
     }
 
     @Override

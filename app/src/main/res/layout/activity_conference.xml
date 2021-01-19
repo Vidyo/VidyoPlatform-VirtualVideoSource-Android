@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light">
@@ -10,27 +9,6 @@
         android:id="@+id/video_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <com.otaliastudios.cameraview.CameraView
-        android:id="@+id/camera_view"
-        android:layout_width="@dimen/camera_view_width"
-        android:layout_height="@dimen/camera_view_height"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/material_margin"
-        android:layout_marginBottom="@dimen/camera_view_offset"
-        app:cameraEngine="camera2"
-        app:cameraFacing="front"
-        app:cameraFrameProcessingMaxHeight="@integer/processing_max_height"
-        app:cameraFrameProcessingMaxWidth="@integer/processing_max_width"
-        app:cameraMode="video"
-        app:cameraVideoSizeBiggest="true"
-        app:cameraVideoSizeMaxHeight="@integer/picture_max_height"
-        app:cameraVideoSizeMaxWidth="@integer/picture_max_width"
-        app:cameraVideoSizeMinHeight="@integer/picture_min_height"
-        app:cameraVideoSizeMinWidth="@integer/picture_min_width"
-        app:cameraVideoSizeSmallest="false">
-
-    </com.otaliastudios.cameraview.CameraView>
 
     <include layout="@layout/control_view_layout" />
 

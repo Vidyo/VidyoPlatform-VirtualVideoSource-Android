@@ -1,7 +1,5 @@
 package com.vidyo.vidyoconnector.capture.model;
 
-import com.otaliastudios.cameraview.frame.Frame;
-
 /**
  * Capture constraints for remote delivery.
  */
@@ -41,9 +39,9 @@ public class CaptureConstraints {
     }
 
     /* Usually happens after rotation */
-    public static boolean shouldUpdateConstraints(CaptureConstraints constraints, Frame frame) {
-        return constraints == null || constraints.originalWidth != frame.getSize().getWidth() || constraints.originalHeight != frame.getSize().getHeight();
-    }
+//    public static boolean shouldUpdateConstraints(CaptureConstraints constraints, Frame frame) {
+//        return constraints == null || constraints.originalWidth != frame.getSize().getWidth() || constraints.originalHeight != frame.getSize().getHeight();
+//    }
 
     @Override
     public String toString() {
