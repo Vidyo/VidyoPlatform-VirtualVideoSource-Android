@@ -108,7 +108,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
     }
 
     public void toggleCaptureState(boolean state) {
-        internalState.setCapture(state);
+        internalState.setPreview(state);
         invalidateState();
     }
 
@@ -118,7 +118,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
         muteMic.setImageResource(internalState.isMuteMic() ? R.drawable.microphone_off : R.drawable.microphone_on);
         muteSpeaker.setImageResource(internalState.isMuteSpeaker() ? R.drawable.speaker_off : R.drawable.speaker_on);
         debugOption.setImageResource(internalState.isDebug() ? R.drawable.ic_debug_on : R.drawable.ic_debug_off);
-        captureToggle.setImageResource(internalState.isCapture() ? R.drawable.ic_video_on : R.drawable.ic_video_off);
+        captureToggle.setImageResource(internalState.isPreview() ? R.drawable.ic_video_on : R.drawable.ic_video_off);
     }
 
     private void init() {
@@ -189,6 +189,10 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
                 controlEvent = new ControlEvent<>(ControlEvent.Call.SEND_LOGS);
                 break;
             case R.id.capture_toggle:
+                boolean preview = !internalState.isPreview();
+                controlEvent = new ControlEvent<>(ControlEvent.Call.SHOW_PREVIEW, preview);
+                internalState.setPreview(preview);
+                invalidateState();
                 break;
         }
 
@@ -204,7 +208,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
         private boolean muteMic;
         private boolean muteSpeaker;
 
-        private boolean capture;
+        private boolean preview = true;
 
         private boolean debug;
 
@@ -213,7 +217,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
             muteCamera = in.readByte() != 0x00;
             muteMic = in.readByte() != 0x00;
             muteSpeaker = in.readByte() != 0x00;
-            capture = in.readByte() != 0x00;
+            preview = in.readByte() != 0x00;
             debug = in.readByte() != 0x00;
         }
 
@@ -264,12 +268,12 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
             return debug;
         }
 
-        public boolean isCapture() {
-            return capture;
+        public boolean isPreview() {
+            return preview;
         }
 
-        public void setCapture(boolean capture) {
-            this.capture = capture;
+        public void setPreview(boolean preview) {
+            this.preview = preview;
         }
 
         static State defaultState() {
@@ -287,7 +291,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
             dest.writeByte((byte) (muteCamera ? 0x01 : 0x00));
             dest.writeByte((byte) (muteMic ? 0x01 : 0x00));
             dest.writeByte((byte) (muteSpeaker ? 0x01 : 0x00));
-            dest.writeByte((byte) (capture ? 0x01 : 0x00));
+            dest.writeByte((byte) (preview ? 0x01 : 0x00));
             dest.writeByte((byte) (debug ? 0x01 : 0x00));
         }
 

@@ -21,8 +21,6 @@ class CaptureManager(lifecycleOwner: LifecycleOwner,
 
     private val cameraSource = CameraSource(activity, this)
 
-    private var isCameraFront: Boolean = true
-
     init {
         vidyoConnector.createVirtualVideoSource(VirtualVideoSource.VirtualVideoSourceType.VIDYO_VIRTUALVIDEOSOURCETYPE_CAMERA,
                 "Virtual_Camera_23406002346",
@@ -78,8 +76,6 @@ class CaptureManager(lifecycleOwner: LifecycleOwner,
 
     @SuppressLint("UnsafeExperimentalUsageError")
     override fun analyze(image: ImageProxy) {
-
-
         if (isVirtualCameraShareStarted) {
 
             val yBuffer = image.planes[0].buffer // Y

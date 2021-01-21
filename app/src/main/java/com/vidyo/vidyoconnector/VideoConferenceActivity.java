@@ -225,6 +225,10 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             case SEND_LOGS:
                 AppUtils.sendLogs(this);
                 break;
+            case SHOW_PREVIEW:
+                boolean preview = (Boolean) event.getValue();
+                connector.showPreview(preview);
+                break;
         }
     }
 
