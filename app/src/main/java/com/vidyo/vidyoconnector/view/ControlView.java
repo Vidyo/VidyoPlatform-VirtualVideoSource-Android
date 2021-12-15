@@ -1,5 +1,6 @@
 package com.vidyo.vidyoconnector.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Parcel;
@@ -144,6 +145,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
         disable(false);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         if (internalState == null) return;

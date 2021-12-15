@@ -16,6 +16,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.vidyo.VidyoClient.Connector.Connector;
 import com.vidyo.VidyoClient.Connector.ConnectorPkg;
+import com.vidyo.VidyoClient.Device.Device;
+import com.vidyo.VidyoClient.Device.RemoteWindowShare;
+import com.vidyo.VidyoClient.Endpoint.Participant;
 import com.vidyo.vidyoconnector.event.ControlEvent;
 import com.vidyo.vidyoconnector.event.IControlLink;
 import com.vidyo.vidyoconnector.share.ShareManager;
@@ -27,7 +30,7 @@ import com.vidyo.vidyoconnector.view.ControlView;
  * Conference activity holding all connection and callbacks logic.
  */
 public class VideoConferenceActivity extends FragmentActivity implements Connector.IConnect, IControlLink,
-        View.OnLayoutChangeListener, ShareManager.Listener {
+        View.OnLayoutChangeListener, Connector.IRegisterRemoteWindowShareEventListener, ShareManager.Listener {
 
     public static final String PORTAL_KEY = "portal.key";
     public static final String ROOM_KEY = "room.key";
@@ -93,6 +96,8 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
                 8, "*@VidyoClient info@VidyoConnector info warning",
                 AppUtils.configLogFile(this), 0);
         Logger.i("Connector instance has been created.");
+
+        connector.registerRemoteWindowShareEventListener(this);
 
         shareManager = new ShareManager(this, connector);
         shareManager.setShareListener(this);
@@ -311,5 +316,20 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         ConnectorPkg.setApplicationUIContext(null);
 
         Logger.i("Connector instance has been released.");
+    }
+
+    @Override
+    public void onRemoteWindowShareAdded(RemoteWindowShare remoteWindowShare, Participant participant) {
+        runOnUiThread(() -> shareManager.requestStopShare());
+    }
+
+    @Override
+    public void onRemoteWindowShareRemoved(RemoteWindowShare remoteWindowShare, Participant participant) {
+
+    }
+
+    @Override
+    public void onRemoteWindowShareStateUpdated(RemoteWindowShare remoteWindowShare, Participant participant, Device.DeviceState deviceState) {
+
     }
 }

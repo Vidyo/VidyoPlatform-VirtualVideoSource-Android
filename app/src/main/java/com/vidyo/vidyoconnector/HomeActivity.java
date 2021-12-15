@@ -25,8 +25,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS = new String[]{
             Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.RECORD_AUDIO
     };
 
     private static final int PERMISSIONS_REQUEST_ALL = 0x7c9;
@@ -100,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSIONS_REQUEST_ALL) {
             requestPermissions();
         }

@@ -1,5 +1,7 @@
 package com.vidyo.vidyoconnector.share.model;
 
+import androidx.annotation.NonNull;
+
 /**
  * Share constraints for remote delivery.
  */
@@ -34,7 +36,8 @@ public class ShareConstraints {
     }
 
     private static float getScaleFactor(int width, int height, int quality) {
-        final int side = width < height ? width : height; // check with what side we should work in order to get delta
+        // check with what side we should work in order to get delta
+        final int side = Math.min(width, height);
         return side < quality ? DEFAULT_SCALE : (float) quality / side;
     }
 
@@ -43,6 +46,7 @@ public class ShareConstraints {
         return constraints == null || constraints.originalWidth != frameHolder.width || constraints.originalHeight != frameHolder.height;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ShareConstraints{" +

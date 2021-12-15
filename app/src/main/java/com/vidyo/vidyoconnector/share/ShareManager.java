@@ -50,10 +50,10 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
     private Listener shareListener;
 
     private Connector connector;
-    private MediaProjectionManager projectionManager;
+    private final MediaProjectionManager projectionManager;
 
-    private ShareSession shareCaptureSession;
-    private FrameProvider frameProvider;
+    private final ShareSession shareCaptureSession;
+    private final FrameProvider frameProvider;
 
     private Intent captureIntent;
 
@@ -61,7 +61,7 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
     private ShareConstraints shareConstraints;
 
     private boolean isSharing;
-    private boolean isShareAvailable;
+    private final boolean isShareAvailable;
 
     private boolean isBounded;
 
@@ -289,7 +289,7 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
 
     }
 
-    private ServiceConnection shareServiceConnection = new ServiceConnection() {
+    private final ServiceConnection shareServiceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

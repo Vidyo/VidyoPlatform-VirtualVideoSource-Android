@@ -53,7 +53,7 @@ public class ShareService extends Service {
 
     private static final int SHARE_NOTIFICATION_ID = 0x143;
 
-    private IBinder shareServiceBinder = new ShareServiceBinder();
+    private final IBinder shareServiceBinder = new ShareServiceBinder();
     private ShareManager shareManager;
 
     @Override

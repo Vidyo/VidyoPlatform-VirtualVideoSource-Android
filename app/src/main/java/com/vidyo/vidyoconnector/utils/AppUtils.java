@@ -9,8 +9,6 @@ import android.os.Build;
 
 import androidx.core.content.FileProvider;
 
-import com.vidyo.vidyoconnector.BuildConfig;
-
 import java.io.File;
 import java.util.List;
 
@@ -53,7 +51,7 @@ public class AppUtils {
 
         if (!logFile.exists()) return null;
 
-        return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".file.provider", logFile);
+        return FileProvider.getUriForFile(context, com.vidyo.vidyoconnector.BuildConfig.APPLICATION_ID + ".file.provider", logFile);
     }
 
     private static void deleteRecursive(File fileOrDirectory) {

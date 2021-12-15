@@ -115,7 +115,10 @@ public class ShareSession {
     }
 
     private void setupReader() {
-        imageReader = ImageReader.newInstance(shareConfig.width, shareConfig.height, PixelFormat.RGBA_8888, IMAGE_READER_CONCURRENT_IMAGES_ACCESS_COUNT);
+        imageReader = ImageReader.newInstance(shareConfig.width,
+                shareConfig.height,
+                PixelFormat.RGBA_8888,
+                IMAGE_READER_CONCURRENT_IMAGES_ACCESS_COUNT);
         imageReader.setOnImageAvailableListener(this::processImage, uiThreadHandler);
     }
 
