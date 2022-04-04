@@ -46,6 +46,9 @@ public class ShareSession {
 
     private ShareSessionListener sessionCallback;
 
+    private final Handler postOrientationHandler = new Handler();
+    private Runnable postOrientationRunnable;
+
     private final MediaProjection.Callback projectionCallback = new MediaProjection.Callback() {
 
         @Override
@@ -60,17 +63,32 @@ public class ShareSession {
         this.mediaProjection = mediaProjection;
 
         initCaptureTaskListener();
-        startCapture();
+        startCapture(context);
     }
 
     public void listen(ShareSessionListener captureSessionListener) {
         this.sessionCallback = captureSessionListener;
     }
 
-    public void onCaptureOrientationChanged() {
-        Logger.i("onCaptureConfigChanged");
-        stopCapture();
-        startShareWithDelay();
+    public void onCaptureOrientationChanged(Context context) {
+        if (postOrientationRunnable != null)
+            postOrientationHandler.removeCallbacks(postOrientationRunnable);
+
+        postOrientationRunnable = () -> {
+            postOrientationRunnable = null;
+
+            ShareConfiguration shareConfiguration = ShareConfiguration.create(context, windowManager);
+            if (shareConfiguration.width == this.shareConfig.width && shareConfiguration.height == this.shareConfig.height) {
+                Logger.i("Share orientation update not required. Skip update.");
+                return;
+            }
+
+            Logger.i("onCaptureConfigChanged");
+            stopCapture();
+            startShareWithDelay(context);
+        };
+
+        postOrientationHandler.postDelayed(postOrientationRunnable, START_CAPTURE_DELAY_IN_MILLIS);
     }
 
     public void requestReleaseSession() {
@@ -104,17 +122,19 @@ public class ShareSession {
         return mediaProjection == null;
     }
 
-    private void startCapture() {
+    private void startCapture(Context context) {
         Logger.i("startCapture");
-        shareConfig = ShareConfiguration.create(windowManager);
         captureTaskQueue.add(() -> {
-            setupReader();
+            setupReader(context);
             setUpVirtualDisplay();
             mediaProjection.registerCallback(projectionCallback, uiThreadHandler);
         });
     }
 
-    private void setupReader() {
+    private void setupReader(Context context) {
+        shareConfig = ShareConfiguration.create(context, windowManager);
+        Logger.i("Setup reader with config: %s", shareConfig);
+
         imageReader = ImageReader.newInstance(shareConfig.width,
                 shareConfig.height,
                 PixelFormat.RGBA_8888,
@@ -153,9 +173,8 @@ public class ShareSession {
      * We need to set reader and virtual display preparations with delay during rotation of the screen.
      * App start obtaining virtual display before there is one, so we set approximate delay.
      */
-    private void startShareWithDelay() {
+    private void startShareWithDelay(Context context) {
         Logger.i("startShareWithDelay");
-        shareConfig = ShareConfiguration.create(windowManager);
         captureTaskQueue.add(() -> {
             try {
                 Thread.sleep(START_CAPTURE_DELAY_IN_MILLIS);
@@ -163,7 +182,7 @@ public class ShareSession {
                 e.printStackTrace();
             }
 
-            setupReader();
+            setupReader(context);
             setUpVirtualDisplay();
         });
     }
@@ -177,6 +196,10 @@ public class ShareSession {
                 releaseProjection();
             }
         });
+
+        if (postOrientationRunnable != null)
+            postOrientationHandler.removeCallbacks(postOrientationRunnable);
+        postOrientationRunnable = null;
 
         if (sessionCallback != null) sessionCallback.onSessionStopped();
         sessionCallback = null;

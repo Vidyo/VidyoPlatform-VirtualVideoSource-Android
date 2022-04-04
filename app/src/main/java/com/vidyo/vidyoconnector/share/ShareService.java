@@ -80,8 +80,8 @@ public class ShareService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (shareManager != null && shareManager.isSharing()) {
-            shareManager.updateShareOrientation();
+        if (shareManager != null) {
+            shareManager.tryUpdateShareOrientation();
         }
     }
 

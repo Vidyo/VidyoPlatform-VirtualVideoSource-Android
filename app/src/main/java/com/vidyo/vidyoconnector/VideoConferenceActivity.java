@@ -55,6 +55,8 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             ControlView.State state = controlView.getState();
             connector.setMode(Connector.ConnectorMode.VIDYO_CONNECTORMODE_Foreground);
             connector.setCameraPrivacy(state.isMuteCamera());
+
+            shareManager.tryUpdateShareOrientation();
         }
     }
 

@@ -182,11 +182,11 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
         if (this.shareListener != null) shareListener.onShareStarted();
     }
 
-    void updateShareOrientation() {
-        if (!isSharing) return;
+    public void tryUpdateShareOrientation() {
+        if (!isSharing || this.activity == null) return;
 
         Logger.i(">> updateShareOrientation");
-        this.shareCaptureSession.onCaptureOrientationChanged();
+        this.shareCaptureSession.onCaptureOrientationChanged(this.activity);
         Logger.i("<< updateShareOrientation");
     }
 
@@ -266,7 +266,7 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
     @Override
     public void onVirtualVideoSourceStateUpdated(VirtualVideoSource virtualVideoSource, Device.DeviceState deviceState) {
         if (virtualVideoSource.getType() == VirtualVideoSource.VirtualVideoSourceType.VIDYO_VIRTUALVIDEOSOURCETYPE_SHARE) {
-            Logger.i("Virtual share state updated. Name: " + virtualVideoSource.getName());
+            Logger.i("Virtual share state updated. Name: " + virtualVideoSource.getName() + ", State: " + deviceState);
 
             switch (deviceState) {
                 case VIDYO_DEVICESTATE_Started:
