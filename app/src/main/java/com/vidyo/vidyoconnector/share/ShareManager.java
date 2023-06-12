@@ -149,7 +149,7 @@ public class ShareManager implements Connector.IRegisterVirtualVideoSourceEventL
 
         if (connector != null) {
             this.connector.unregisterVirtualVideoSourceEventListener();
-            this.connector.selectVirtualWindowShare(null);
+            this.connector.selectVirtualSourceWindowShare(null);
 
             this.connector = null;
         }

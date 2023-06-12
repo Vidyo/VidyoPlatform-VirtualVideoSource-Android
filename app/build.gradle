@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.vidyo.vidyoconnector"
 
-        minSdkVersion 22
-        targetSdkVersion 31
+        minSdkVersion 23
+        targetSdkVersion 33
 
         versionCode 1
         versionName "1.0"
@@ -33,10 +33,10 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.10")
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.10'
 }

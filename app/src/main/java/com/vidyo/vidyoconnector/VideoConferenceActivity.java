@@ -95,7 +95,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
          */
         videoView = findViewById(R.id.video_frame);
         connector = new Connector(videoView, Connector.ConnectorViewStyle.VIDYO_CONNECTORVIEWSTYLE_Default,
-                8, "*@VidyoClient info@VidyoConnector info warning",
+                8, "debug@VidyoClient info@VidyoConnector info warning",
                 AppUtils.configLogFile(this), 0);
         Logger.i("Connector instance has been created.");
 
